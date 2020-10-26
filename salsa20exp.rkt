@@ -1,5 +1,4 @@
 #lang racket
-
 ;;;; Copyright Johan Sjölén 2020
 (require redex
          "ct-wasm.rkt"
@@ -712,24 +711,26 @@
   (term
    ((pair
      (ϵ (glob
-         (const i32 sym-var-$o-l)
-         (const i32 sym-var-$p-l)
-         (const i32 sym-var-$k-l)
-         (const i32 sym-var-$c-l) ; 3
+         (const i32 sym-var-$o)
+         (const i32 sym-var-$p)
+         (const i32 sym-var-$k)
+         (const i32 sym-var-$c) ; 3
          ; 36 - 3 = 33
          (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0)
          (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0)
          (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0)
          (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0)
          (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0)
-         (const i32 0) (const i32 0) (const i32 0)
+         (const i32 0) (const i32 0)
+
+         (const i32 0)
          )
         (func))
      (ϵ (glob
-         (const i32 sym-var-$o-r)
-         (const i32 sym-var-$p-r)
-         (const i32 sym-var-$k-r)
-         (const i32 sym-var-$c-r)
+         (const i32 sym-var-$o)
+         (const i32 sym-var-$p)
+         (const i32 sym-var-$k)
+         (const i32 sym-var-$c)
          ; 36 - 3 = 33
          (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0)
          (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0) (const i32 0)

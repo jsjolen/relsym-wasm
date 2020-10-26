@@ -267,24 +267,24 @@ Gotta write separate left/right globals and locals!!!
    0))
 (define (sat-step1 conf*)
   (set! call-count (+ call-count 1))
-  (display call-count) (display " ")
+  ;(display call-count) (display " ")
   ;(display (reduce-ϵ (lambda (x red) (+ 1 red)) conf* 0))
   (let* ([ret (ensure-first (apply-reduction-relation/tag-with-names rel-> conf*))]
         [rule (first ret)]
         [conf*% (second ret)]
-        [in-if? (or #t (> (length+ conf*%) (length+ conf*)))])
+        [in-if? (or #f (> (length+ conf*%) (length+ conf*)))])
     (reduce-ϵ  
      (lambda (conf accum)
        (match-let ([(list final-confs acc-conf*) accum])
          (let ([final? (term (final? ,conf))])
            (if in-if?
                (begin
-                 ;(displayln (format "~a IF(~a/sec)" iter (/ (- call-count last-step)
-                 ;                                   (/ (- (current-inexact-milliseconds)
-                 ;                                        ctime) 1000))))
-                 ;(set! last-step call-count)
-                 ;(set! iter (+ iter 1))
-                 ;(set! ctime (current-inexact-milliseconds))
+                 (displayln (format "~a IF(~a/sec)" iter (/ (- call-count last-step)
+                                                    (/ (- (current-inexact-milliseconds)
+                                                         ctime) 1000))))
+                 (set! last-step call-count)
+                 (set! iter (+ iter 1))
+                 (set! ctime (current-inexact-milliseconds))
                  (let-values ([(b _ __)  (sat? conf '())])
                    (match (list final? b)
                      [(list #t #f)

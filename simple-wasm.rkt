@@ -1,5 +1,5 @@
 #lang racket
-;;;; Copyright Asumu Takikawa 2019, Johan Sjölén 2020
+;;;; Copyright Johan Sjölén 2020
 ;; Small fragment of WebAssembly
 
 (require redex)

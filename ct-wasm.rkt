@@ -9,69 +9,24 @@
 
 (define-extended-language ct-wasm rel-sym-wasm
   (observation ::= any)
-  (observation* ::= any
-                ;(observation observation*)
-                ;ϵ
+  (observation* ::= ;any
+                (observation observation*)
+                ϵ
                 )
   (pair-observation* ::= 
-                     ;(observation* observation*)
-                     any
+                     (observation* observation*)
+                     ;any
                      )
   (obs-conf* ::=
-             ;((pair-observation* conf) obs-conf*)
-             ;ϵ
-             any
+             ((pair-observation* conf) obs-conf*)
+             ϵ
+             ;any
              )
   (EEE ::= hole
       ((pair-observation* conf*) EEE)))
 
 (define-metafunction ct-wasm
   L-helper : conf integer -> observation*
-  ; ========== SALSA20
-  [(L-helper (s F ; load|ϵ
-                (in-hole E ((pair (in-hole E_l
-                                           ((const t sym-var_sec?) ((load t a o) e*_l)))
-                                  e*_r)
-                            e*))
-                pc) 1)
-   (ϵ ϵ)
-   (where #t ,(and (member (term sym-var_sec?)
-                           '(sym-var-$o-l sym-var-$p-l sym-var-$k-l sym-var-$c-l
-                                          sym-var-$o-r sym-var-$p-r sym-var-$k-r sym-var-$c-r)) #t ))]
-  [(L-helper (s F ; ϵ|load
-                (in-hole E ((pair e*_l
-                                  (in-hole E_r
-                                           ((const t sym-var_sec?) ((load t a o) e*_r))))
-                            e*))
-                pc) 2)
-   (ϵ ϵ)
-   (where #t ,(and (member (term sym-var_sec?)
-                              '(sym-var-$o-l sym-var-$p-l sym-var-$k-l sym-var-$c-l
-                                             sym-var-$o-r sym-var-$p-r sym-var-$k-r sym-var-$c-r)) #t ))]
-
-  [(L-helper (s F ; store|ϵ
-                (in-hole E ((pair (in-hole E_l
-                                           ((const t sym-var_sec?)
-                                            ((const t c) ((store t a o) e*_l))))
-                                  e*_r)
-                            e*))
-                pc) 1)
-   (ϵ ϵ)
-   (where #t ,(and (member (term sym-var_sec?)
-                           '(sym-var-$o-l sym-var-$p-l sym-var-$k-l sym-var-$c-l
-                                          sym-var-$o-r sym-var-$p-r sym-var-$k-r sym-var-$c-r)) #t ))]
-  [(L-helper (s F ; ϵ|store
-                (in-hole E ((pair e*_l
-                                  (in-hole E_r
-                                           ((const t sym-var_sec?)
-                                            ((const t c) ((store t a o) e*_r)))))
-                            e*))
-                pc) 2)
-   (ϵ ϵ)
-   (where #t ,(begin0 (and (member (term sym-var_sec?)
-                                      '(sym-var-$o-l sym-var-$p-l sym-var-$k-l sym-var-$c-l
-                                                     sym-var-$o-r sym-var-$p-r sym-var-$k-r sym-var-$c-r)) #t )))]
-  ; =========== SALSA 20
   
   [(L-helper (s F ; load|ϵ
                 (in-hole E ((pair (in-hole E_l
@@ -102,8 +57,7 @@
                 pc) 2)
    ((store (+ o k)) ϵ)]
 
-  [(L-helper (s F ; div|ϵ
-                (in-hole E ((pair 
+  [(L-helper (s F (in-hole E ((pair 
                              (in-hole E_l
                                       ((const t k) ((const t c) ((div t) e*_l))))
                              e*_r)
@@ -111,11 +65,9 @@
                 pc) 1)
    (div ϵ)]
 
-  [(L-helper (s F ; ϵ|div
-                (in-hole E ((pair e*_l
-                                  (in-hole E_r
-                                           ((const t k) ((const t c) ((div t) e*_r)))))
-                            e*))
+  [(L-helper (s F (in-hole E ((pair e*_l (in-hole E_r  
+                                                  ((const t k) ((const t c) ((div t) e*_r)))))
+                              e*))
                 pc) 2)
    (div ϵ)]
   
@@ -130,7 +82,7 @@
       )
    ((trap ϵ) (trap ϵ))]
   ;; branch
-  [(L (s F  (in-hole  E ; if|if
+  [(L (s F  (in-hole E ; if|if
                     ((pair (in-hole E_l ((const t_l c_l)
                                          ((if tf_l e*_thn-l else e*_els-l) e*_l)))
                            (in-hole E_r ((const t_r c_r)
@@ -139,13 +91,13 @@
          pc))
       (((const t_l c_l) ϵ) ((const t_r c_r) ϵ))]
 
-  [(L (s F  (in-hole  E ; if|e*
+  [(L (s F  (in-hole E; if|e*
                     ((pair (in-hole E_l ((const t_l c_l)
                                            ((if tf e*_thn else e*_els) e*_l)))
                              v*_r) e*))
          pc))
    (((const t_l c_l) ϵ) ϵ)]
-  [(L (s F  (in-hole E  ((pair v*_l  ; e*|if
+  [(L (s F  (in-hole E ((pair v*_l  ; e*|if
                              (in-hole E_r ((const t_r c_r)
                                            ((if tf e*_thn else e*_els) e*_r))))
                        e*))
@@ -177,7 +129,7 @@
   apply-L : conf* pair-observation* -> obs-conf*
   [(apply-L ϵ pair-observation*) ϵ]
   [(apply-L (conf conf*) pair-observation*)
-   (((merge-pair-observation* (L conf) pair-observation*) conf)
+   (((merge-pair-observation* pair-observation* (L conf)) conf)
     (apply-L conf* pair-observation*))])
 
 (define-metafunction ct-wasm
